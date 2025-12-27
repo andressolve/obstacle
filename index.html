@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Obstacle is the Way</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            font-family: sans-serif;
+        }
+
+        #container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        img, video {
+            max-width: 100%;
+            max-height: 100vh;
+            object-fit: contain;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        #nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dot.active {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .dot:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+
+<div id="nav-dots"></div>
+
+<div id="container">
+    <!-- Cover -->
+    <section id="section-0">
+        <img src="cover.png" alt="Cover">
+    </section>
+
+    <!-- Pages 1-15 -->
+    <section id="section-1"><img src="page_01.png" alt="Page 1"></section>
+    <section id="section-2"><img src="page_02.png" alt="Page 2"></section>
+    <section id="section-3"><img src="page_03.png" alt="Page 3"></section>
+    <section id="section-4"><img src="page_04.png" alt="Page 4"></section>
+    <section id="section-5"><img src="page_05.png" alt="Page 5"></section>
+    <section id="section-6"><img src="page_06.png" alt="Page 6"></section>
+    <section id="section-7"><img src="page_07.png" alt="Page 7"></section>
+    <section id="section-8"><img src="page_08.png" alt="Page 8"></section>
+    <section id="section-9"><img src="page_09.png" alt="Page 9"></section>
+    <section id="section-10"><img src="page_10.png" alt="Page 10"></section>
+    <section id="section-11"><img src="page_11.png" alt="Page 11"></section>
+    <section id="section-12"><img src="page_12.png" alt="Page 12"></section>
+    <section id="section-13"><img src="page_13.png" alt="Page 13"></section>
+    <section id="section-14"><img src="page_14.png" alt="Page 14"></section>
+    <section id="section-15"><img src="page_15.png" alt="Page 15"></section>
+
+    <!-- Back Cover -->
+    <section id="section-16">
+        <img src="back_cover.png" alt="Back Cover">
+    </section>
+
+    <!-- Finale Video -->
+    <section id="section-17">
+        <video controls>
+            <source src="Inspiring_Boy_s_Confident_Message.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </section>
+</div>
+
+<script>
+    const container = document.getElementById('container');
+    const sections = document.querySelectorAll('section');
+    const navDotsContainer = document.getElementById('nav-dots');
+
+    // Create dots
+    sections.forEach((section, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        dot.dataset.index = index;
+        dot.addEventListener('click', () => {
+            section.scrollIntoView({ behavior: 'smooth' });
+        });
+        navDotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    // Intersection Observer to highlight active dot
+    const observerOptions = {
+        root: container,
+        threshold: 0.5
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const index = Array.from(sections).indexOf(entry.target);
+                dots.forEach(d => d.classList.remove('active'));
+                if (dots[index]) {
+                    dots[index].classList.add('active');
+                }
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+</script>
+
+</body>
+</html>
